@@ -47,7 +47,7 @@ export default {
     },
     methods: {
         calculate(value) {
-            if(value === '=')
+            if(value == '=')
             {
                 this.pendingOperations.push(this.value);
 
