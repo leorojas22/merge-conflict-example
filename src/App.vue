@@ -18,7 +18,10 @@
                 </div>
             </div>
             <div class="row mb-4">
-                <div class="col offset-9 text-center">
+                <div class="col-3 offset-6 text-center">
+                    <button class="btn btn-lg btn-danger btn-block" type="button" @click="calculate('clear')">Clear</button>
+                </div>
+                <div class="col-3 text-center">
                     <button class="btn btn-lg btn-primary btn-block" type="button" @click="calculate('=')">=</button>
                 </div>
             </div>
@@ -47,6 +50,13 @@ export default {
         calculate(value) {
             if(isNaN(value))
             {
+                if(value == 'clear')
+                {
+                    console.log('cleared');
+                    this.value = 0;
+                }
+
+
                 console.log("Action")
             }
             else
