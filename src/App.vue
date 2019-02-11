@@ -36,6 +36,8 @@ export default {
     data() {
         return {
             value: 0,
+            pendingOperations: [],
+            nextAction: "",
             keys: [
                 [9, 8, 7, '+'],
                 [6, 5, 4, '-'],
@@ -45,17 +47,72 @@ export default {
     },
     methods: {
         calculate(value) {
-            if(isNaN(value))
+            if(value === '=')
             {
-                console.log("Action")
+                this.pendingOperations.push(this.value);
+
+                // Equals pressed, run through each operation
+                let calculatedValue = 0;
+                let nextOperation = false;
+                this.pendingOperations.forEach(value => {
+
+                    if(isNaN(value))
+                    {
+                        nextOperation = value;
+                    }
+                    else
+                    {
+
+                        if(nextOperation)
+                        {
+                            switch(nextOperation)
+                            {
+                                case '+':
+                                    calculatedValue += value;
+                                    break;
+                                case '-':
+                                    calculatedValue -= value;
+                                    break;
+                                case '/':
+                                    calculatedValue /= value;
+                                    break;
+                                case 'x':
+                                    calculatedValue *= value;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            calculatedValue = value;
+                        }
+                    }
+                });
+
+
+                this.value = calculatedValue;
+                this.pendingOperations = [];
+                this.nextAction = false;
+            }
+            else if(isNaN(value))
+            {
+                this.pendingOperations.push(this.value);
+                this.pendingOperations.push(value);
+                this.nextAction = value;
             }
             else
             {
-                console.log("Number")
+
+                if(this.nextAction)
+                {
+                    // An action was pressed prior to this, clear out current value
+                    this.value = "";
+                }
 
                 let newValue = "";
                 newValue += this.value + "" + value;
                 this.value = parseFloat(newValue);
+
+                this.nextAction = false;
             }
         }
     }
